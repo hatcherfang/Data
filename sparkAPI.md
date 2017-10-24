@@ -1,0 +1,4 @@
+### reduceByKey  
+### flatMap  
+### map  
+### parallelize  
