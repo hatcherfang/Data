@@ -38,6 +38,7 @@ val mp = rdd.mapPartitions(x => x.filter(_._2 == "female")).map(x => x._1)　
 ```
 output: kpop lucy
 ```
+RDD依赖图  
 4. mapPartitionsWithIndex(func):与mapPartitions类似，不同的时函数多了个分区索引的参数  
 func类型：(Int, Iterator[T]) => Iterator[U]  
 ```
@@ -144,6 +145,7 @@ eg:
 ```
 val rdd = sc.parallelize(1 to 16,4)
 val glomRDD = rdd.glom() //RDD[Array[T]]
+glomRDD.collect()
 ```
 ```
 output: res80: Array[Array[Int]] = Array(Array(1, 2, 3, 4), Array(5, 6, 7, 8), Array(9, 10, 11, 12), Array(13, 14, 15, 16))
@@ -350,7 +352,7 @@ output:
 (A,(2,A1))
 (A,(2,A2))
 ```
-10. LeftOutJoin(otherDataSet，numPartitions):左外连接，包含左RDD的所有数据，如果右边没有与之匹配的用None表示,numPartitions设置分区数，提高作业并行度  
+10. leftOuterJoin(otherDataSet，numPartitions):左外连接，包含左RDD的所有数据，如果右边没有与之匹配的用None表示,numPartitions设置分区数，提高作业并行度  
 ```
 val arr = List(("A", 1), ("B", 2), ("A", 2), ("B", 3),("C",1))
 val arr1 = List(("A", "A1"), ("B", "B1"), ("A", "A2"), ("B", "B2"))
@@ -372,7 +374,7 @@ output:
 (A,(2,Some(A1)))
 (A,(2,Some(A2)))
 ```
-11. RightOutJoin(otherDataSet, numPartitions):右外连接，包含右RDD的所有数据，如果左边没有与之匹配的用None表示,numPartitions设置分区数，提高作业并行度  
+11. rightOuterJoin(otherDataSet, numPartitions):右外连接，包含右RDD的所有数据，如果左边没有与之匹配的用None表示,numPartitions设置分区数，提高作业并行度  
 ```
 val arr = List(("A", 1), ("B", 2), ("A", 2), ("B", 3))
 val arr1 = List(("A", "A1"), ("B", "B1"), ("A", "A2"), ("B", "B2"),("C","C1"))
