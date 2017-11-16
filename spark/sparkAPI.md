@@ -541,7 +541,6 @@ RDD依赖图
 14. saveAsSequenceFile(path:String):将最终的结果数据以sequence的格式保存到指定的HDFS目录中(can not find)  
 
 
-1. reduceByKey  
 ### parallelize  
 ## Reference:  
 1. [Spark函数详解系列之RDD基本转换](http://www.cnblogs.com/MOBIN/p/5373256.html#5)  
