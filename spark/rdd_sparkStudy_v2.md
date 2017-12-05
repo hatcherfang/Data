@@ -54,7 +54,7 @@ sc.textFile("abc.log").map().map().........map().saveAsTextFile("")
 
 ### 我们做Cache/Persist意味着什么？  
 
-其实就是给某个Stage加上了一个saveAsMemoryBlockFile的动作，然后下次再要数据的时候，就不用算了。这些存在内存的数据就表示了某个RDD处理后的结果。这个才是说为啥Spark是内存计算引擎的地方。在MR里，你是要放到HDFS里的，但Spark允许你把中间结果放内存里。  
+其实就是给某个Stage加上了一个saveAsMemoryBlockFile的动作，然后下次再要数据的时候，就不用算了。这些存在内存的数据就表示了某个RDD处理后的结果。**这个才是说为啥Spark是内存计算引擎的地方。在MR里，你是要放到HDFS里的，但Spark允许你把中间结果放内存里**。  
 
 ### 使用Spark Cache不仅仅为了性能考虑   
 rdd在进行多次transformation操作之后对该RDD进行两次Action操作, 两次得到的RDD并不是通过transformation重新转换得来的，地址都不一样，如果想要实现相同就要使用cache或者persist来缓存RDD数据。  
@@ -72,7 +72,7 @@ rdd在进行多次transformation操作之后对该RDD进行两次Action操作, �
 环境变量SPARK_LOCAL_DIRS用来设置RDD持久化到磁盘的目录，它同时也是shuffle的缓存目录。  
 
 ### Reference  
-[spark使用总结](http://smallx.me/2016/06/07/spark%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/)   
-[Spark会把数据都载入到内存么？](http://www.jianshu.com/p/b70fe63a77a8)  
-[Using Spark’s cache for correctness, not just performance](http://www.spark.tc/using-sparks-cache-for-correctness-not-just-performance/)  
+- [spark使用总结](http://smallx.me/2016/06/07/spark%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/)   
+- [Spark会把数据都载入到内存么？](http://www.jianshu.com/p/b70fe63a77a8)  
+- [Using Spark’s cache for correctness, not just performance](http://www.spark.tc/using-sparks-cache-for-correctness-not-just-performance/)  
 
