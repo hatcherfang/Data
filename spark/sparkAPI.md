@@ -543,6 +543,6 @@ RDD依赖图
 
 ### parallelize  
 ## Reference:  
-1. [Spark函数详解系列之RDD基本转换](http://www.cnblogs.com/MOBIN/p/5373256.html#5)  
-2. [Spark常用函数讲解之键值RDD转换](http://www.cnblogs.com/MOBIN/p/5384543.html)  
-3. [Spark常用函数讲解之Action操作](http://www.cnblogs.com/MOBIN/p/5414490.html)  
+- [Spark函数详解系列之RDD基本转换](http://www.cnblogs.com/MOBIN/p/5373256.html#5)  
+- [Spark常用函数讲解之键值RDD转换](http://www.cnblogs.com/MOBIN/p/5384543.html)  
+- [Spark常用函数讲解之Action操作](http://www.cnblogs.com/MOBIN/p/5414490.html)  

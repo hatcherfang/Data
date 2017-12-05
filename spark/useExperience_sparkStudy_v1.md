@@ -69,4 +69,4 @@ You need to enable "Remote Login" for your machine. From System Preferences, sel
 ### [ERROR OneForOneStrategy](https://databricks.gitbooks.io/databricks-spark-knowledge-base/content/spark_streaming/error_oneforonestrategy.html)  
 
 ### reference:  
-[Databricks Spark Knowledge Base](https://www.gitbook.com/book/databricks/databricks-spark-knowledge-base/details)  
+- [Databricks Spark Knowledge Base](https://www.gitbook.com/book/databricks/databricks-spark-knowledge-base/details)  
