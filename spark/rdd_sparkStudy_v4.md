@@ -66,7 +66,7 @@ spark的worker节点相互之间不能直接进行通信，如果在一个节点
 
 #### 何时进行分区？  
 
-spark程序可以通过控制RDD分区方式来减少通信开销。分区并不是对所有应用都是有好处的，如果给定RDD只需要被扫描一次，我们完全没有必要对其预先进行分区处理。只有当数据集多次在诸如连接这种基于键的操作中使用时，分区才会有帮助，同时记得将分区得到的新RDD持久化哦。  
+spark程序可以通过控制RDD分区方式来减少通信开销。分区并不是对所有应用都是有好处的，如果给定RDD只需要被扫描一次，我们完全没有必要对其预先进行分区处理。**只有当数据集多次在诸如连接这种基于键的操作中使用时，分区才会有帮助，同时记得将分区得到的新RDD持久化哦**。  
 
 更多的分区意味着更多的并行任务(Task)数。对于shuffle过程，如果分区中数据量过大可能会引起OOM，这时可以将RDD划分为更多的分区，这同时也将导致更多的并行任务。spark通过线程池的方式复用executor JVM进程，每个Task作为一个线程存在于线程池中，这样就减少了线程的启动开销，可以高效地支持单个executor内的多任务执行，这样你就可以放心地将任务数量设置成比该应用分配到的CPU cores还要多的数量了。  
 #### 如何分区与分区信息  
@@ -76,21 +76,35 @@ spark程序可以通过控制RDD分区方式来减少通信开销。分区并不
 对基本类型RDD进行重新分区，可以通过repartition()函数，只需要指定重分区的分区数即可。repartition操作会引起shuffle，因此spark提供了一个优化版的repartition，叫做coalesce()，它允许你指定是否需要shuffle。在使用coalesce时，需要注意以下几个问题：  
 
 - coalesce默认shuffle为false，这将形成窄依赖，例如我们将1000个分区重新分到100个中时，并不会引起shuffle，而是原来的10个分区合并形成1个分区。  
-- 但是对于从很多个(比如1000个)分区重新分到很少的(比如1个)分区这种极端情况，数据将会分布到很少节点(对于从1000到1的重新分区，则是1个节点)上运行，完全无法开掘集群的并行能力，为了规避这个问题，可以设置shuffle为true。由于shuffle可以分隔stage，这就保证了上一阶段stage中的任务仍是很多个分区在并行计算，不这样设置的话，则两个上下游的任务将合并成一个stage进行计算，这个stage便会在很少的分区中进行计算。  
+- 但是对于从很多个(比如1000个)分区重新分到很少的(比如1个)分区这种极端情况，数据将会分布到很少节点(对于从1000到1的重新分区，则是1个节点)上运行，完全无法开掘集群的并行能力，为了规避这个问题，可以设置shuffle为true。**由于shuffle可以分隔stage，这就保证了上一阶段stage中的任务仍是很多个分区在并行计算，不这样设置的话，则两个上下游的任务将合并成一个stage进行计算，这个stage便会在很少的分区中进行计算**。  
 - 如果当前每个分区的数据量过大，需要将分区数量增加，以利于充分利用并行，这时我们可以设置shuffle为true。对于数据分布不均而需要重分区的情况也是如此。**spark默认使用hash分区器将数据重新分区**。  
 
 对RDD进行预置的hash分区，需将RDD转换为RDD[(key,value)]类型，然后就可以通过隐式转换为PairRDDFunctions，进而可以通过如下形式将RDD哈希分区，HashPartitioner会根据RDD中每个(key,value)中的key得出该记录对应的新的分区号：  
 ```
 PairRDDFunctions.partitionBy(new HashPartitioner(n))  
 ```
+
 另外，spark还提供了一个范围分区器，叫做RangePartitioner。范围分区器争取将所有的分区尽可能分配得到相同多的数据，并且所有分区内数据的上界是有序的。  
 
 一个RDD可能存在分区器也可能没有，我们可以通过RDD的partitioner属性来获取其分区器，它返回一个Option对象(RangePartitioner 分区器返回None, HashPartitioner分区器返回`Some(org.apache.spark.HashPartitioner@4)`)。  
 eg:  
 ```
+scala> coalesceRDD.partitioner
+res154: Option[org.apache.spark.Partitioner] = None
+
 scala> partitionHashRDD.partitioner
 res121: Option[org.apache.spark.Partitioner] = Some(org.apache.spark.HashPartitioner@4)
 ```
 
+#### 如何进行自定义分区  
+
+spark允许你通过提供一个自定义的Partitioner对象来控制RDD的分区方式，这可以让你利用领域知识进一步减少通信开销。
+
+要实现自定义的分区器，你需要继承Partitioner类，并实现下面三个方法即可：
+
+numPartitions: 返回创建出来的分区数。
+getPartition: 返回给定键的分区编号(0到numPartitions-1)。
+equals: Java判断相等性的标准方法。这个方法的实现非常重要，spark需要用这个方法来检查你的分区器对象是否和其他分区器实例相同，这样spark才可以判断两个RDD的分区方式是否相同。
+
 ### Reference  
-[spark使用总结](http://smallx.me/2016/06/07/spark%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/)   
+- [spark使用总结](http://smallx.me/2016/06/07/spark%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/)   
