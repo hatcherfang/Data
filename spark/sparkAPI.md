@@ -125,16 +125,16 @@ output:
 目,但不会报错，只是分区个数还是原来的  
 eg: shuffle=false  
 ```
-val rdd = sc.parallelize(1 to 16,4)
-val coalesceRDD = rdd.coalesce(3) //当suffle的值为false时，不能增加分区数(即分区数不能从5->7)
+val rdd = sc.parallelize(1 to 16,5)
+val coalesceRDD = rdd.coalesce(7) //当suffle的值为false时，不能增加分区数(即分区数不能从5->7)
 println("重新分区后的分区个数:"+coalesceRDD.partitions.size)　
 ```
 ```
-output: 重新分区后的分区个数:3  
+output: 重新分区后的分区个数:5  
 ```
 eg: shuffle=true 
 ```
-val rdd = sc.parallelize(1 to 16,4)
+val rdd = sc.parallelize(1 to 16,5)
 val coalesceRDD = rdd.coalesce(7,true)
 println("重新分区后的分区个数:"+coalesceRDD.partitions.size)
 println("RDD依赖关系:"+coalesceRDD.toDebugString)
