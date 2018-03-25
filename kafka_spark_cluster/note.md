@@ -98,3 +98,4 @@ bin/kafka-console-producer.sh --broker-list 192.168.1.1:9092 --topic user-behavi
 - [Kafka Quickstart](https://kafka.apache.org/quickstart)   
 - [Spark Streaming Programing Guide](http://spark.apache.org/docs/latest/streaming-programming-guide.html)  
 - [spark streaming + kafka +python(编程)初探](https://www.jianshu.com/p/04f8e78ea656)  
+- [基于Python的Spark Streaming+Kafka编程实践](https://blog.csdn.net/eric_sunah/article/details/54096057)  
