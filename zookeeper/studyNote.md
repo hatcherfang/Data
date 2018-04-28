@@ -1,4 +1,4 @@
-## ZooKeeper Fuction  
+## ZooKeeper Function  
 1. 提供一个小型的数据节点, 这些节点被称为znode, 采用类似于文件系统的层级树状结构进行管理。  
 2. 数据节点会在整个zookeeper集群中同步, 用户在编写分布式应用时,可以在zookeeper集群中存储一些公用  
 信息在里面。   
