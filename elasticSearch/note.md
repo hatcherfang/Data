@@ -158,6 +158,10 @@ match查询有几个参数控制匹配行为，如operator，接受值or和and�
 ```
 select * from article where contents like '%笔记%' 
 ```
+此处亲测叙述有误：  
+1. match operator 组合只是提高匹配精度, operator=and 表示单词组合都必须在句子里面出现，并不需要连续，
+跟sql里的 '%keyword%'并不类似。    
+2. match_phrase 才是把一个词整体去做匹配  
 3. 查询数量(search_type=count)  
 用于查询符合结果的文档数而不是文档内容。需使用search_type指定为count。  
 ```
@@ -195,6 +199,15 @@ ES中的更新总是这样：先删除旧文档，再插入新文档。
 因为文档一旦在倒排索引中存储，就不能被更改。  
 无论是局部更新还是完全替换，都必须走先删除后插入的流程。（ES内部是这样，不过你不用关注这个过程）。  
 5. 删除文档(DELETE)   
+
+### [xpack 插件使用](https://discuss.elastic.co/t/x-pack-6-3-sql-query/137765/2)  
+eg:  
+```
+POST /_xpack/sql?format=txt
+{
+    "query": "select * from \"your index name\" limit 10"
+}
+```
 
 ### Reference  
 [ElasticSearch DSL](https://elasticsearch-dsl.readthedocs.io/en/latest/search_dsl.html)  
