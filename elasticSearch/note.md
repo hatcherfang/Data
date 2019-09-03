@@ -208,6 +208,10 @@ POST /_xpack/sql?format=txt
     "query": "select * from \"your index name\" limit 10"
 }
 ```
+### [keyword vs text](https://blog.csdn.net/qq_26230421/article/details/81947517)  
+1. keyword不做分词,可以作为全文匹配检索, text做分词, 全文匹配的时候匹配不到   
+2. es存储的时候keyword占用的存储空间较大, text占用的较少  
+疑问: keyword说是没做分词，但是es查询的时候部分匹配也是可以查询的到，这里表示很奇怪   
 
 ### Reference  
 [ElasticSearch DSL](https://elasticsearch-dsl.readthedocs.io/en/latest/search_dsl.html)  
